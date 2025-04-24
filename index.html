@@ -87,8 +87,8 @@
 </head>
 <body>
   <!-- Música de fundo -->
-  <audio autoplay loop>
-    <source src="C418  - Sweden - Minecraft Volume Alpha(MP3_160K).mp3" type="audio/mpeg">
+  <audio id="bgMusic" loop>
+    <source src="https://vgmsite.com/soundtracks/minecraft-volume-alpha/jdwtzrcfrq/02.%20Sweden.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Efeito sonoro -->
@@ -114,6 +114,12 @@
     const scoreEl = document.getElementById("score");
     const mensagemEl = document.getElementById("mensagem");
     const popSound = document.getElementById("popSound");
+    const bgMusic = document.getElementById("bgMusic");
+
+    // Começa a música de fundo após o primeiro clique
+    document.addEventListener("click", () => {
+      bgMusic.play();
+    }, { once: true });
 
     function updateTimer() {
       const now = new Date();
@@ -151,6 +157,7 @@
       }, 500);
     }, 5000);
 
+    // Criar corações clicáveis que caem
     function criarCoracao() {
       const heart = document.createElement('div');
       heart.textContent = '♥';
@@ -160,6 +167,7 @@
       heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
       document.body.appendChild(heart);
 
+      // Ao clicar no coração, pontuação aumenta e o som é tocado
       heart.onclick = () => {
         pontos++;
         scoreEl.textContent = `Pontos: ${pontos}`;
@@ -167,6 +175,7 @@
         popSound.play();
         heart.remove();
         if (pontos % 5 === 0) mostrarMensagem();
+        if (pontos === 69) mostrarMensagemEspecial();
       };
 
       setTimeout(() => {
@@ -187,6 +196,12 @@
       setTimeout(() => mensagemEl.textContent = '', 3000);
     }
 
+    function mostrarMensagemEspecial() {
+      mensagemEl.textContent = "A mulher mais safada e fofa desse universo";
+      setTimeout(() => mensagemEl.textContent = '', 5000);
+    }
+
+    // Criar os corações a cada 600ms
     setInterval(criarCoracao, 600);
   </script>
 </body>
