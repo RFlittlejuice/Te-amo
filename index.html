@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Eu Te Amo</title>
+  <link rel="icon" href="https://emojiapi.dev/api/v1/2764/64.png" type="image/png">
   <style>
     body {
       margin: 0;
@@ -31,8 +32,10 @@
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
+      font-size: 2em;
+      margin-bottom: 10px;
+      min-height: 3em;
+      transition: opacity 0.5s ease;
     }
 
     #timer {
@@ -75,7 +78,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Eu te amo há:</h1>
+    <h1 id="phrase">Eu te amo há:</h1>
     <div id="timer"></div>
     <div class="heart">♥</div>
   </div>
@@ -99,6 +102,26 @@
     setInterval(updateTimer, 1000);
     updateTimer();
 
+    // Frases alternadas
+    const phrases = [
+      "Eu te amo há:",
+      "Desde que você apareceu, se passaram:",
+      "Cada segundo com você é um presente:",
+      "Você é meu tempo favorito:",
+      "A gente se ama há:"
+    ];
+
+    let phraseIndex = 0;
+    setInterval(() => {
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      const phraseEl = document.getElementById("phrase");
+      phraseEl.style.opacity = 0;
+      setTimeout(() => {
+        phraseEl.textContent = phrases[phraseIndex];
+        phraseEl.style.opacity = 1;
+      }, 500);
+    }, 5000);
+
     // Mini corações caindo
     function createHeart() {
       const heart = document.createElement('div');
@@ -108,7 +131,6 @@
       heart.style.animationDuration = (2 + Math.random() * 3) + 's';
       heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
       document.body.appendChild(heart);
-
       setTimeout(() => {
         heart.remove();
       }, 5000);
