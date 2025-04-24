@@ -91,8 +91,8 @@
     <source src="https://vgmsite.com/soundtracks/minecraft-volume-alpha/jdwtzrcfrq/02.%20Sweden.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Efeito sonoro -->
-  <audio id="popSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b3a73440b.mp3?filename=pop-94319.mp3" preload="auto"></audio>
+  <!-- Som de clique confiável -->
+  <audio id="popSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
   <div class="container">
     <h1 id="phrase">Eu te amo há:</h1>
@@ -116,7 +116,7 @@
     const popSound = document.getElementById("popSound");
     const bgMusic = document.getElementById("bgMusic");
 
-    // Começa a música de fundo após o primeiro clique
+    // Toca música de fundo após o primeiro clique
     document.addEventListener("click", () => {
       bgMusic.play();
     }, { once: true });
@@ -167,7 +167,7 @@
       heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
       document.body.appendChild(heart);
 
-      // Ao clicar no coração, pontuação aumenta e o som é tocado
+      // Clicar no coração = som + ponto + mensagem
       heart.onclick = () => {
         pontos++;
         scoreEl.textContent = `Pontos: ${pontos}`;
@@ -201,7 +201,6 @@
       setTimeout(() => mensagemEl.textContent = '', 5000);
     }
 
-    // Criar os corações a cada 600ms
     setInterval(criarCoracao, 600);
   </script>
 </body>
