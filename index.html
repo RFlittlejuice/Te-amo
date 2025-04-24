@@ -2,26 +2,45 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Te Amo - Mini Jogo</title>
+  <title>Eu Te Amo</title>
+  <link rel="icon" href="https://emojiapi.dev/api/v1/2764/64.png" type="image/png">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom, #000000, #1a001a);
+      background: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
       color: white;
       text-align: center;
+      position: relative;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      max-width: 500px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     h1 {
-      margin-top: 20px;
       font-size: 2em;
+      margin-bottom: 10px;
+      min-height: 3em;
+      transition: opacity 0.5s ease;
     }
 
-    #score {
+    #timer, #score {
       font-size: 1.5em;
-      margin-top: 10px;
+      font-weight: bold;
     }
 
     .heart {
@@ -31,47 +50,114 @@
       animation: fall linear;
       cursor: pointer;
       user-select: none;
+      z-index: 1;
     }
 
     @keyframes fall {
-      from { top: -50px; opacity: 1; }
-      to { top: 100vh; opacity: 0.5; }
+      0% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    #carta {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      font-size: 1.1em;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     #mensagem {
-      margin-top: 20px;
-      font-size: 1.2em;
+      margin-top: 15px;
       color: #ffb3d9;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>Toque nos corações!</h1>
-  <div id="score">Pontos: 0</div>
-  <div id="mensagem"></div>
-
   <!-- Música de fundo -->
   <audio autoplay loop>
     <source src="https://raw.githubusercontent.com/RFlittlejuice/Te-amo/main/C418%20%20-%20Sweden%20-%20Minecraft%20Volume%20Alpha(MP3_160K).mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Som do clique -->
+  <!-- Efeito sonoro -->
   <audio id="popSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6b3a73440b.mp3?filename=pop-94319.mp3" preload="auto"></audio>
 
+  <div class="container">
+    <h1 id="phrase">Eu te amo há:</h1>
+    <div id="timer"></div>
+    <div id="score">Pontos: 0</div>
+    <div id="mensagem"></div>
+    <div id="carta">
+      Desde o dia em que te conheci a minha vida mudou.  
+      Você sempre me faz rir e me deixa feliz.  
+      Eu te amo e quero que saiba disso.  
+      Continue sendo essa pessoa incrível, tá?  
+      Te amo, chuchu.
+    </div>
+  </div>
+
   <script>
+    const startDate = new Date(2025, 1, 9, 0, 0, 0); // 9/2/2025
     let pontos = 0;
-    const scoreEl = document.getElementById('score');
-    const mensagemEl = document.getElementById('mensagem');
-    const popSound = document.getElementById('popSound');
+    const scoreEl = document.getElementById("score");
+    const mensagemEl = document.getElementById("mensagem");
+    const popSound = document.getElementById("popSound");
+
+    function updateTimer() {
+      const now = new Date();
+      const diff = now - startDate;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("timer").textContent =
+        `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    const phrases = [
+      "Eu te amo há:",
+      "Desde que você apareceu, se passaram:",
+      "Cada segundo com você é um presente",
+      "Você é meu tempo favorito",
+      "A gente se ama há:",
+      "Tempo que eu sonho com você:"
+    ];
+
+    let phraseIndex = 0;
+    setInterval(() => {
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      const phraseEl = document.getElementById("phrase");
+      phraseEl.style.opacity = 0;
+      setTimeout(() => {
+        phraseEl.textContent = phrases[phraseIndex];
+        phraseEl.style.opacity = 1;
+      }, 500);
+    }, 5000);
 
     function criarCoracao() {
       const heart = document.createElement('div');
       heart.textContent = '♥';
       heart.classList.add('heart');
       heart.style.left = Math.random() * 90 + 'vw';
-      heart.style.fontSize = (1 + Math.random() * 1.5) + 'em';
       heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+      heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
       document.body.appendChild(heart);
 
       heart.onclick = () => {
@@ -80,15 +166,11 @@
         popSound.currentTime = 0;
         popSound.play();
         heart.remove();
-        if (pontos % 5 === 0) {
-          mostrarMensagem();
-        }
+        if (pontos % 5 === 0) mostrarMensagem();
       };
 
       setTimeout(() => {
-        if (document.body.contains(heart)) {
-          heart.remove();
-        }
+        if (document.body.contains(heart)) heart.remove();
       }, 6000);
     }
 
@@ -102,12 +184,10 @@
       ];
       const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
       mensagemEl.textContent = msg;
-      setTimeout(() => {
-        mensagemEl.textContent = '';
-      }, 3000);
+      setTimeout(() => mensagemEl.textContent = '', 3000);
     }
 
-    setInterval(criarCoracao, 800);
+    setInterval(criarCoracao, 600);
   </script>
 </body>
 </html>
