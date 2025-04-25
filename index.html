@@ -17,6 +17,33 @@
       position: relative;
     }
 
+    #inicio {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    #inicio button {
+      font-size: 1.5em;
+      padding: 20px 40px;
+      border: none;
+      border-radius: 10px;
+      background: #ff3366;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff3366;
+      transition: background 0.3s;
+    }
+
+    #inicio button:hover {
+      background: #e62e5c;
+    }
+
     .container {
       position: relative;
       z-index: 2;
@@ -29,6 +56,7 @@
       margin: auto;
       top: 50%;
       transform: translateY(-50%);
+      display: none;
     }
 
     h1 {
@@ -86,15 +114,21 @@
   </style>
 </head>
 <body>
+
+  <!-- Tela de início -->
+  <div id="inicio">
+    <button onclick="abrirCarta()">Abrir Carta</button>
+  </div>
+
   <!-- Música de fundo -->
   <audio id="bgMusic" loop>
     <source src="https://vgmsite.com/soundtracks/minecraft-volume-alpha/jdwtzrcfrq/02.%20Sweden.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Som de clique confiável -->
+  <!-- Som de clique -->
   <audio id="popSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
-  <div class="container">
+  <div class="container" id="conteudo">
     <h1 id="phrase">Eu te amo há:</h1>
     <div id="timer"></div>
     <div id="score">Pontos: 0</div>
@@ -116,10 +150,11 @@
     const popSound = document.getElementById("popSound");
     const bgMusic = document.getElementById("bgMusic");
 
-    // Toca música de fundo após o primeiro clique
-    document.addEventListener("click", () => {
+    function abrirCarta() {
+      document.getElementById("inicio").style.display = "none";
+      document.getElementById("conteudo").style.display = "block";
       bgMusic.play();
-    }, { once: true });
+    }
 
     function updateTimer() {
       const now = new Date();
