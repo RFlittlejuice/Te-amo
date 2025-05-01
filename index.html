@@ -54,14 +54,8 @@
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(-10px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh);
-        opacity: 0;
-      }
+      0% { transform: translateY(-10px); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
     }
 
     #carta {
@@ -85,7 +79,7 @@
       font-weight: bold;
     }
 
-    #abrirCartaBtn {
+    #abrirCartaBtn, #toggleMusic {
       margin-top: 20px;
       padding: 10px 20px;
       font-size: 1em;
@@ -95,9 +89,10 @@
       color: white;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      display: inline-block;
     }
 
-    #abrirCartaBtn:hover {
+    #abrirCartaBtn:hover, #toggleMusic:hover {
       background-color: #ff1a66;
     }
   </style>
@@ -116,9 +111,10 @@
     <div id="timer"></div>
     <div id="score">Pontos: 0</div>
     <div id="mensagem"></div>
-    
+
+    <button id="toggleMusic">Tocar Música</button>
     <button id="abrirCartaBtn">Abrir Carta</button>
-    
+
     <div id="carta">
       Desde o dia em que te conheci a minha vida mudou.  
       Você sempre me faz rir e me deixa feliz.  
@@ -129,17 +125,26 @@
   </div>
 
   <script>
-    const startDate = new Date(2025, 1, 9, 0, 0, 0); // 9/2/2025
+    const startDate = new Date(2025, 1, 9, 0, 0, 0);
     let pontos = 0;
     const scoreEl = document.getElementById("score");
     const mensagemEl = document.getElementById("mensagem");
     const popSound = document.getElementById("popSound");
     const bgMusic = document.getElementById("bgMusic");
+    const toggleMusicBtn = document.getElementById("toggleMusic");
 
-    // Toca música de fundo após o primeiro clique
-    document.addEventListener("click", () => {
-      bgMusic.play();
-    }, { once: true });
+    let isPlaying = false;
+
+    toggleMusicBtn.addEventListener("click", () => {
+      if (isPlaying) {
+        bgMusic.pause();
+        toggleMusicBtn.textContent = "Tocar Música";
+      } else {
+        bgMusic.play();
+        toggleMusicBtn.textContent = "Pausar Música";
+      }
+      isPlaying = !isPlaying;
+    });
 
     function updateTimer() {
       const now = new Date();
@@ -177,7 +182,6 @@
       }, 500);
     }, 5000);
 
-    // Criar corações clicáveis que caem
     function criarCoracao() {
       const heart = document.createElement('div');
       heart.textContent = '♥';
@@ -187,7 +191,6 @@
       heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
       document.body.appendChild(heart);
 
-      // Clicar no coração = som + ponto + mensagem
       heart.onclick = () => {
         pontos++;
         scoreEl.textContent = `Pontos: ${pontos}`;
@@ -223,7 +226,6 @@
 
     setInterval(criarCoracao, 600);
 
-    // Mostrar carta ao clicar no botão
     document.getElementById("abrirCartaBtn").addEventListener("click", () => {
       document.getElementById("carta").style.display = "block";
       document.getElementById("abrirCartaBtn").style.display = "none";
